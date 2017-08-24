@@ -1,6 +1,11 @@
 package com.alannnc.touchevents.touchevents;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +13,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -64,6 +72,7 @@ public class MainActivity extends Activity implements
     @Override
     public boolean onScroll(MotionEvent event1, MotionEvent event2, float distanceX,
                             float distanceY) {
+        changeBackgroundColor(Color.RED);
         Log.d(DEBUG_TAG, "onScroll: " + event1.toString() + event2.toString());
         return true;
     }
@@ -81,6 +90,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public boolean onDoubleTap(MotionEvent event) {
+        changeBackgroundColor(Color.BLUE);
         Log.d(DEBUG_TAG, "onDoubleTap: " + event.toString());
         return true;
     }
@@ -95,5 +105,29 @@ public class MainActivity extends Activity implements
     public boolean onSingleTapConfirmed(MotionEvent event) {
         Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
         return true;
+    }
+
+    public void changeBackgroundColor(int color) {
+        RelativeLayout view  = findViewById(R.id.main_layout);
+        Drawable background = view.getBackground();
+        int colorFrom = Color.TRANSPARENT;
+        if (background instanceof ColorDrawable)
+            colorFrom = ((ColorDrawable) background).getColor();
+        int colorTo = color;
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(250); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                RelativeLayout view  = findViewById(R.id.main_layout);
+                view.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+
+        });
+        colorAnimation.start();
+
+
+//        view.setBackgroundColor(color);
     }
 }
