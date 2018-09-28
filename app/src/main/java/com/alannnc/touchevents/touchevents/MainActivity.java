@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -26,6 +27,11 @@ public class MainActivity extends Activity implements
 
     private static final String DEBUG_TAG = "Gestures";
     private GestureDetectorCompat mDetector;
+
+     public int onetap = 0;
+     public int twotap = 0;
+     public int longtap = 0;
+     public TextView textOP;
 
     // Called when the activity is first created.
     @Override
@@ -39,6 +45,8 @@ public class MainActivity extends Activity implements
         // Set the gesture detector as the double tap
         // listener.
         mDetector.setOnDoubleTapListener(this);
+
+        textOP = (TextView) findViewById(R.id.hello_world);
     }
 
     @Override
@@ -66,6 +74,19 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onLongPress(MotionEvent event) {
+
+
+        Toast.makeText(this, "Long text", Toast.LENGTH_SHORT).show();
+
+        if(longtap==0){
+            changeBackgroundColor(Color.RED);
+            longtap = 1;
+            textOP.setTextColor(Color.WHITE);
+        }else{
+            changeBackgroundColor(Color.WHITE);
+            textOP.setTextColor(Color.BLACK);
+        }
+
         Log.d(DEBUG_TAG, "onLongPress: " + event.toString());
     }
 
@@ -90,7 +111,20 @@ public class MainActivity extends Activity implements
 
     @Override
     public boolean onDoubleTap(MotionEvent event) {
-        changeBackgroundColor(Color.BLUE);
+
+        Toast.makeText(this, "Double tap", Toast.LENGTH_SHORT).show();
+
+        if(twotap==0){
+            changeBackgroundColor(Color.MAGENTA);
+            twotap = 1;
+            textOP.setTextColor(Color.WHITE);
+        }else{
+            changeBackgroundColor(Color.YELLOW);
+            textOP.setTextColor(Color.BLACK);
+        }
+
+
+        Toast.makeText(this, "onDoubleTap", Toast.LENGTH_SHORT).show();
         Log.d(DEBUG_TAG, "onDoubleTap: " + event.toString());
         return true;
     }
@@ -103,6 +137,18 @@ public class MainActivity extends Activity implements
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
+
+        Toast.makeText(this, "Single tap", Toast.LENGTH_SHORT).show();
+
+        if(onetap==0){
+            changeBackgroundColor(Color.DKGRAY);
+            onetap = 1;
+            textOP.setTextColor(Color.BLACK);
+        }else{
+            changeBackgroundColor(Color.BLACK);
+            textOP.setTextColor(Color.WHITE);
+        }
+
         Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
         return true;
     }
@@ -115,7 +161,7 @@ public class MainActivity extends Activity implements
             colorFrom = ((ColorDrawable) background).getColor();
         int colorTo = color;
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-        colorAnimation.setDuration(250); // milliseconds
+        colorAnimation.setDuration(1000); // milliseconds
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
